@@ -9,25 +9,25 @@
 // @name          Old Bug Indicator
 // @namespace     http://blog.bogojoker.com
 // @description   Give old bugs a red background color
-// @include       https://bugs.webkit.org/request.cgi
+// @include       https://bugs.webkit.org/request.cgi*
 // @version       1.0 - Initial Version - Friday July 10, 2009
 // ==/UserScript==
 
 var OldBugIndicator = {
-	
+
 	getDateFromRow: function(tr) {
 	  var date = tr.children[4].innerHTML;
 	  return date.match(/^\s*$/) ?
 	    null :
 	    Date.parse(date.substring(0,10).replace(/-/g,'/'));
 	},
-	
+
 	init: function() {
-		var DAY = 1000*60*60*24,
-		    WEEK = DAY*7,
+		var DAY   = 1000*60*60*24,
+		    WEEK  = DAY*7,
 		    MONTH = DAY*30,
 		    TODAY = new Date(),
-		    LAST_WEEK = new Date( +TODAY - WEEK ),
+		    LAST_WEEK  = new Date( +TODAY - WEEK ),
 		    LAST_MONTH = new Date( +TODAY - MONTH );
 		    tbl = document.getElementsByClassName('requests')[0];
 		    trs = tbl.children[0].children;
@@ -44,7 +44,7 @@ var OldBugIndicator = {
 		}
 	}
 
-}
+};
 
-// Run on page load
-window.addEventListener('load', OldBugIndicator.init, false);
+// Run
+OldBugIndicator.init();
