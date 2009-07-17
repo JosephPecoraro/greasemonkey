@@ -13,74 +13,70 @@
 // @version       1.0 - Initial Version - Friday July 17, 2009
 // ==/UserScript==
 
-(function() {
+// Very Simplistic URL Parse and Modify Class
+var URL = function(str) {
+    var prefixMatch = str.match(/^(.*?)[?#]/);
+    if (!prefixMatch)
+        return null;
 
-    // Very Simplistic URL Parse and Modify Class
-    var URL = function(str) {
-        var prefixMatch = str.match(/^(.*?)[?#]/);
-        if (!prefixMatch)
-            return null;
-    
-        var prefix = prefixMatch[1],
-            search = str.match(/\?([^#]+)/),
-            sets = (search) ? search[1].split('&') : [],
-            params = {},
-            hashMatch = str.match(/#.*/),
-            hash = (hashMatch) ? hashMatch[0] : '',
-            items = null,
-            key = null,
-            value = null;
-        for (var i=0, len=sets.length; i<len; ++i) {
-    		items = sets[i].split('=');
-    		key = decodeURIComponent(items[0]);
-    		value = decodeURIComponent(items[1]);
-    		params[key]= value;
-        }
-
-        this.prefix = prefix;
-        this.hash = hash;
-        this.params = params;
-        
+    var prefix = prefixMatch[1],
+        search = str.match(/\?([^#]+)/),
+        sets = (search) ? search[1].split('&') : [],
+        params = {},
+        hashMatch = str.match(/#.*/),
+        hash = (hashMatch) ? hashMatch[0] : '',
+        items = null,
+        key = null,
+        value = null;
+    for (var i=0, len=sets.length; i<len; ++i) {
+		items = sets[i].split('=');
+		key = decodeURIComponent(items[0]);
+		value = decodeURIComponent(items[1]);
+		params[key]= value;
     }
 
-    URL.prototype = {
-        setParam: function(key, value) {
+    this.prefix = prefix;
+    this.hash = hash;
+    this.params = params;
+    
+}
+
+URL.prototype = {
+    setParam: function(key, value) {
+        this.params[key] = value;
+    },
+
+    setParamIfNone: function(key, value) {
+        if (!this.params[key]) {
             this.params[key] = value;
-        },
-    
-        setParamIfNone: function(key, value) {
-            if (!this.params[key]) {
-                this.params[key] = value;
-            }
         }
-    
-        toString: function() {
-            var str = this.prefix;
-            var first = true;
-            for (var key in this.params) {
-                if (first) {
-                    str += '?';
-                    first = false;
-                } else {
-                    str += '&';
-                }
-                str += encodeURIComponent(key) + '=' + encodeURIComponent(this.params[key]);
+    },
+
+    toString: function() {
+        var str = this.prefix;
+        var first = true;
+        for (var key in this.params) {
+            if (first) {
+                str += '?';
+                first = false;
+            } else {
+                str += '&';
             }
-            return str + this.hash;
+            str += encodeURIComponent(key) + '=' + encodeURIComponent(this.params[key]);
         }
+        return str + this.hash;
     }
+}
 
-
-    // Before: https://bugs.webkit.org/attachment.cgi?id=32743
-    // After: https://bugs.webkit.org/attachment.cgi?id=32743&action=prettypatch
-    var lst = document.changeform.getElementsByTagName('a');
-    for (var i=0, len=lst.length; i<len; ++i) {
-      var elem = lst[i];
-      var url = new URL(elem.href);
-      if (!url) continue;
-      if ( elem.href.match(/attachment\.cgi/) )
-          url.setParamIfNone('action', 'prettypatch');
-      elem.href = url.toString();
-    }
-
-})();
+// Before: https://bugs.webkit.org/attachment.cgi?id=32743
+// After: https://bugs.webkit.org/attachment.cgi?id=32743&action=prettypatch
+var lst = document.changeform.getElementsByTagName('a');
+for (var i=0, len=lst.length; i<len; ++i) {
+  var elem = lst[i];
+  var url = new URL(elem.href);
+  if (!url) continue;
+  if ( elem.href.match(/attachment\.cgi/) ) {
+      url.setParamIfNone('action', 'prettypatch');
+  }
+  elem.href = url.toString();
+}
