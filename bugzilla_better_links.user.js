@@ -17,7 +17,7 @@
 var URL = function(str) {
     var prefixMatch = str.match(/^(.*?)[?#]/);
     if (!prefixMatch)
-        return null;
+        return;
 
     var prefix = prefixMatch[1],
         search = str.match(/\?([^#]+)/),
@@ -38,7 +38,6 @@ var URL = function(str) {
     this.prefix = prefix;
     this.hash = hash;
     this.params = params;
-    
 }
 
 URL.prototype = {
@@ -74,7 +73,7 @@ var lst = document.changeform.getElementsByTagName('a');
 for (var i=0, len=lst.length; i<len; ++i) {
   var elem = lst[i];
   var url = new URL(elem.href);
-  if (!url) continue;
+  if (!url.prefix) continue;
   if ( elem.href.match(/attachment\.cgi/) ) {
       url.setParamIfNone('action', 'prettypatch');
   }
