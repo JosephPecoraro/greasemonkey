@@ -14,15 +14,7 @@
 // @version       1.0 - Initial Version - Sunday July 19, 2009
 // ==/UserScript==
 
-var lst;
-var lh = '19px';
-
-lst = document.getElementsByClassName('source_diff');
-for (var i=0, len=lst.length; i<len; ++i) {
-  lst[i].style.lineHeight = lh;
-}
-
-lst = document.getElementsByClassName('textmate-source-numbers');
-for (var i=0, len=lst.length; i<len; ++i) {
-  lst[i].style.lineHeight = lh;
+var pres = document.getElementsByTagName('pre');
+for (var i=0, len=pres.length; i<len; ++i) {
+  pres[i].style.lineHeight = '19px';
 }
