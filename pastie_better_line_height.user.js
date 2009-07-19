@@ -11,6 +11,8 @@
 // @description   Better Line Height for Coloring
 // @include       http://pastie.textmate.org/private/*
 // @include       http://pastie.textmate.org/pastes/*
+// @include       http://pastie.org/private/*
+// @include       http://pastie.org/pastes/*
 // @version       1.0 - Initial Version - Sunday July 19, 2009
 // ==/UserScript==
 
